@@ -28,7 +28,7 @@ def scanFolder(source, target):
 
 
 def scan_folder(source, target):
-    create_folder_if_not_exist(target)
+    create_folder_if_not_exists(target)
     source_glob = os.path.join(source, '**/*.csv')
     source_files = glob.glob(source_glob, recursive=True)
     for source_file in source_files:
@@ -39,7 +39,7 @@ def scan_folder(source, target):
     return len(source_files)
 
 
-def create_folder_if_not_exist(name):
+def create_folder_if_not_exists(name):
     os.makedirs(name, exist_ok=True)
 
 
