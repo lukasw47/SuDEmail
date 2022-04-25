@@ -2,84 +2,102 @@ import os
 import pathlib
 import shutil
 import glob
-from typing import Optional
+from collections import defaultdict
+from typing import Mapping
 
 import pandas
 
 
 def process_csv_files_from_source(source: pathlib.Path, target: pathlib.Path) -> None:
-    source_files = find_csv_files(source)
-    if source_files is None:
+    check_if_path_is_folder(path=source)
+    create_folder_if_not_exists(path=target)
+    csv_source_paths = get_csv_source_paths_in_path_grouped_by_filenames(path=source)
+    process_csv_source_paths(csv_source_paths, target)
+
+
+def check_if_path_is_folder(path: pathlib.Path) -> None:
+    if not path.is_dir():
+        raise FileNotFoundError(f'folder not found: {path}')
+
+
+def create_folder_if_not_exists(path: pathlib.Path) -> None:
+    os.makedirs(path, exist_ok=True)
+
+
+def get_csv_source_paths_in_path_grouped_by_filenames(path: pathlib.Path) -> Mapping[str, list[pathlib.Path]]:
+    csv_filepaths = load_csv_filepaths_in_path(path)
+    return get_source_paths_grouped_by_filenames(filepaths=csv_filepaths)
+
+
+def load_csv_filepaths_in_path(path: pathlib.Path) -> list[str]:
+    search = str(path / '**/*time_record*.csv')
+    return glob.glob(search, recursive=True)
+
+
+def get_source_paths_grouped_by_filenames(filepaths: list[str]) -> Mapping[str, list[pathlib.Path]]:
+    source_paths = defaultdict(list)
+    for file in map(pathlib.Path, filepaths):
+        source_paths[file.name].append(file)
+    return source_paths
+
+
+def process_csv_source_paths(csv_source_paths: Mapping[str, list[pathlib.Path]], target: pathlib.Path) -> None:
+    for filename, filepaths in csv_source_paths.items():
+        target_filepath = target / filename
+        copy_files_to_target(filepaths, target_filepath)
+        save_combined_files(filepaths, target_filepath)
+
+
+def copy_files_to_target(filepaths: list[pathlib.Path], target_filepath: pathlib.Path) -> None:
+    for index, source_file in enumerate(filepaths):
+        copy_file_to_target(source_file, target_filepath, index)
+    print(f">> files copied: {len(filepaths)}")
+
+
+def copy_file_to_target(source_file: pathlib.Path, target_filepath: pathlib.Path, index: int) -> None:
+    target_csv_file = get_target_csv_file_with_index(target_filepath, index)
+    shutil.copy(source_file, target_csv_file)
+    print(f'>> copy "{source_file}" to "{target_csv_file}"')
+
+
+def get_target_csv_file_with_index(target: pathlib.Path, index: int) -> pathlib.Path:
+    return target.with_suffix(f'.{index + 1}.csv')
+
+
+def save_combined_files(filepaths: list[pathlib.Path], target_filepath: pathlib.Path) -> None:
+    if len(filepaths) == 0:
         return
-    copy_files_to_target(source_files, target)
-    save_combined_files(source_files, target)
+    target_csv_content = get_combined_csv_files(filepaths)
+    target_filepath.write_text(target_csv_content)
+    print(f'>> combine files in: {target_filepath}')
+    save_excel_file(csv_file=target_filepath)
 
 
-def find_csv_files(root_path: pathlib.Path) -> Optional[list[str]]:
-    if not os.path.isdir(root_path):
-        print(f'>> error: folder not found: {root_path}')
-        return
-    source_glob = os.path.join(root_path, '**/*time_record*.csv')
-    return glob.glob(source_glob, recursive=True)
+def get_combined_csv_files(filepaths: list[pathlib.Path]) -> str:
+    combine = ['']
+    for combine[0], file_content in map(get_csv_file_header_and_content, filepaths):
+        combine.extend(file_content)
+    return str.join('', combine)
 
 
-def copy_files_to_target(source_files: list[str], target: pathlib.Path) -> None:
-    create_folder_if_not_exists(target)
-    for index, source_file in enumerate(source_files):
-        copy_file_to_target(index, source_file, target)
-    print(f">> files copied: {len(source_files)}")
-
-
-def create_folder_if_not_exists(path_name: pathlib.Path) -> None:
-    os.makedirs(path_name, exist_ok=True)
-
-
-def copy_file_to_target(index: int, source_file: str, target: pathlib.Path) -> None:
-    print(f'>> copy {source_file}')
-    target_file = get_target_file_with_index(source_file, target, index)
-    shutil.copy(source_file, target_file)
-
-
-def get_target_file_with_index(source_file: str, target: pathlib.Path, index: int) -> pathlib.Path:
-    return get_target_file(source_file, target).with_suffix(f'.{index + 1}.csv')
-
-
-def save_combined_files(source_files: list[str], target: pathlib.Path) -> None:
-    if len(source_files) == 0:
-        return
-    target_file = get_target_file(source_file=source_files[0], target=target)
-    target_csv_content = get_combined_csv_files(source_files)
-    target_file.write_text(target_csv_content)
-    print(f'>> combine files in: {target_file}')
-    save_excel_file(csv_file=target_file)
+def get_csv_file_header_and_content(source_file: pathlib.Path) -> tuple[str, list[str]]:
+    with open(source_file, mode='r') as file:
+        header, content = file.readline(), file.readlines()
+        return header, content
 
 
 def save_excel_file(csv_file: pathlib.Path) -> None:
     excel_file = csv_file.with_suffix('.xlsx')
     pandas.read_csv(csv_file, delimiter=';').to_excel(excel_file)
-    print(f'>> combine files in: {excel_file}')
-
-
-def get_target_file(source_file: str, target: pathlib.Path) -> pathlib.Path:
-    source_filename = os.path.basename(source_file)
-    return pathlib.Path(target, source_filename)
-
-
-def get_combined_csv_files(source_files: list[str]) -> str:
-    combine = ['']
-    for combine[0], file_content in map(get_csv_file_header_and_content, source_files):
-        combine.extend(file_content)
-    return str.join('', combine)
-
-
-def get_csv_file_header_and_content(source_file: str) -> tuple[str, list[str]]:
-    with open(source_file, mode='r') as file:
-        header, content = file.readline(), file.readlines()
-        return header, content
+    print(f'>> save to excel: {excel_file}')
 
 
 if __name__ == '__main__':
     source_folder = pathlib.Path("quellordner")
     target_folder = pathlib.Path("zielordner")
 
-    process_csv_files_from_source(source_folder, target_folder)
+    try:
+        process_csv_files_from_source(source_folder, target_folder)
+
+    except FileNotFoundError as error:
+        print(f'>> error: {error}')
