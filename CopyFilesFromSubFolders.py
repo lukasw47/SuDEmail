@@ -4,6 +4,8 @@ import shutil
 import glob
 from typing import Optional
 
+import pandas
+
 
 def process_csv_files_from_source(source: str, target: str) -> None:
     source_files = find_csv_files(source)
@@ -49,6 +51,13 @@ def save_combined_files(source_files: list[str], target) -> None:
     target_csv_content = get_combined_csv_files(source_files)
     target_file.write_text(target_csv_content)
     print(f'>> combine files in: {target_file}')
+    save_excel_file(csv_file=target_file)
+
+
+def save_excel_file(csv_file: pathlib.Path) -> None:
+    excel_file = csv_file.with_suffix('.xlsx')
+    pandas.read_csv(csv_file).to_excel(excel_file)
+    print(f'>> combine files in: {excel_file}')
 
 
 def get_target_file(source_file: str, target: str) -> pathlib.Path:
