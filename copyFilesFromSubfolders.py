@@ -28,7 +28,6 @@ def scanFolder(source, target):
 
 
 def scan_folder(source, target):
-    create_folder_if_not_exists(target)
     source_files = find_csv_files(source)
     copy_files_to_target(files=source_files, target=target)
     return len(source_files)
@@ -44,6 +43,7 @@ def find_csv_files(path_name: str) -> list[str]:
 
 
 def copy_files_to_target(files: list[str], target: str):
+    create_folder_if_not_exists(target)
     for source_file in files:
         print(f'>> copy {source_file}')
         source_filename = os.path.basename(source_file)
