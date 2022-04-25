@@ -5,7 +5,7 @@ import glob
 from typing import Optional
 
 
-def scan_folder(source: str, target: str) -> None:
+def process_csv_files_from_source(source: str, target: str) -> None:
     source_files = find_csv_files(source)
     if source_files is None:
         return
@@ -64,4 +64,4 @@ if __name__ == '__main__':
     source_folder = "quellordner"
     target_folder = "zielordner"
 
-    scan_folder(source_folder, target_folder)
+    process_csv_files_from_source(source_folder, target_folder)
