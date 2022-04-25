@@ -38,7 +38,7 @@ def create_folder_if_not_exists(path_name: str):
 
 
 def find_csv_files(path_name: str) -> list[str]:
-    source_glob = os.path.join(path_name, '**/*.csv')
+    source_glob = os.path.join(path_name, '**/*time_record*.csv')
     return glob.glob(source_glob, recursive=True)
 
 
