@@ -1,4 +1,5 @@
 import os
+import pathlib
 import shutil
 import glob
 from typing import Optional
@@ -33,9 +34,13 @@ def create_folder_if_not_exists(path_name: str) -> None:
 
 def copy_file_to_target(index: int, source_file: str, target: str) -> None:
     print(f'>> copy {source_file}')
-    source_filename = f'{index + 1}_' + os.path.basename(source_file)
-    target_file = os.path.join(target, source_filename)
-    shutil.copy(source_file, target_file)
+    target_filename = get_target_filename(index, source_file, target)
+    shutil.copy(source_file, target_filename)
+
+
+def get_target_filename(index: int, source_file: str, target: str) -> pathlib.Path:
+    source_filename = os.path.basename(source_file)
+    return pathlib.Path(target, source_filename).with_suffix(f'_{index + 1}.csv')
 
 
 def combine_csv_files(files: list[str]) -> str:
