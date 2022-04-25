@@ -10,7 +10,7 @@ def process_csv_files_from_source(source: str, target: str) -> None:
     if source_files is None:
         return
     copy_files_to_target(source_files, target)
-    print(f'>> combine\n{combine_csv_files(source_files)}')
+    save_combined_files(source_files, target)
 
 
 def find_csv_files(path_name: str) -> Optional[list[str]]:
@@ -42,12 +42,21 @@ def get_target_file_with_index(source_file: str, target: str, index: int) -> pat
     return get_target_file(source_file, target).with_suffix(f'.{index + 1}.csv')
 
 
+def save_combined_files(source_files: list[str], target) -> None:
+    if len(source_files) == 0:
+        return
+    target_file = get_target_file(source_file=source_files[0], target=target)
+    target_csv_content = get_combined_csv_files(source_files)
+    target_file.write_text(target_csv_content)
+    print(f'>> combine files in: {target_file}')
+
+
 def get_target_file(source_file: str, target: str) -> pathlib.Path:
     source_filename = os.path.basename(source_file)
     return pathlib.Path(target, source_filename)
 
 
-def combine_csv_files(source_files: list[str]) -> str:
+def get_combined_csv_files(source_files: list[str]) -> str:
     combine = ['']
     for combine[0], file_content in map(get_csv_file_header_and_content, source_files):
         combine.extend(file_content)
