@@ -33,6 +33,7 @@ def scan_folder(source: str, target: str) -> None:
     if source_files is None:
         return
     copy_files_to_target(files=source_files, target=target)
+    print(f'>> combine\n{combine_csv_files(files=source_files)}')
     print(f"Anzahl kopierter Dateien: {len(source_files)}")
 
 
@@ -55,6 +56,22 @@ def copy_files_to_target(files: list[str], target: str) -> None:
         source_filename = os.path.basename(source_file)
         target_file = os.path.join(target, source_filename)
         shutil.copy(source_file, target_file)
+
+
+def combine_csv_files(files: list[str]) -> str:
+    combine = ['']
+    for file in files:
+        file_header, file_content = get_csv_file_header_and_content(filename=file)
+        combine[0] = file_header
+        combine.extend(file_content)
+    return str.join('', combine)
+
+
+def get_csv_file_header_and_content(filename: str) -> tuple[str, list[str]]:
+    with open(filename, mode='r') as file:
+        header = file.readline()
+        content = file.readlines()
+        return header, content
 
 
 if __name__ == '__main__':
