@@ -34,7 +34,6 @@ def scan_folder(source: str, target: str) -> None:
         return
     copy_files_to_target(files=source_files, target=target)
     print(f'>> combine\n{combine_csv_files(files=source_files)}')
-    print(f"Anzahl kopierter Dateien: {len(source_files)}")
 
 
 def create_folder_if_not_exists(path_name: str) -> None:
@@ -56,6 +55,7 @@ def copy_files_to_target(files: list[str], target: str) -> None:
         source_filename = f'{index + 1}_' + os.path.basename(source_file)
         target_file = os.path.join(target, source_filename)
         shutil.copy(source_file, target_file)
+    print(f">> files copied: {len(files)}")
 
 
 def combine_csv_files(files: list[str]) -> str:
