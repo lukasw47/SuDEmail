@@ -45,5 +45,5 @@ if __name__ == '__main__':
     targetFolderName = os.path.join(path, "zielordner")
 
     # action
-    resultNumber = scanFolder(sourceFolderName, targetFolderName)
+    resultNumber = scan_folder(sourceFolderName, targetFolderName)
     print(f"Anzahl kopierter Dateien: {resultNumber}")
