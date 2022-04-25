@@ -61,8 +61,7 @@ def get_csv_file_header_and_content(source_file: str) -> tuple[str, list[str]]:
 
 
 if __name__ == '__main__':
-    path = "."
-    sourceFolderName = os.path.join(path, "quellordner")
-    targetFolderName = os.path.join(path, "zielordner")
+    source_folder = "quellordner"
+    target_folder = "zielordner"
 
-    scan_folder(sourceFolderName, targetFolderName)
+    scan_folder(source_folder, target_folder)
