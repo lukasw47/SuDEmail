@@ -1,8 +1,3 @@
-# copyFilesFromSubfolders
-# Author:   Ivanov
-# Revision: 0.2
-#
-
 import os
 import shutil
 import glob
