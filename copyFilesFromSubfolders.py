@@ -46,8 +46,7 @@ def get_target_file(index: int, source_file: str, target: str) -> pathlib.Path:
 def combine_csv_files(files: list[str]) -> str:
     combine = ['']
     for file in files:
-        file_header, file_content = get_csv_file_header_and_content(filename=file)
-        combine[0] = file_header
+        combine[0], file_content = get_csv_file_header_and_content(filename=file)
         combine.extend(file_content)
     return str.join('', combine)
 
