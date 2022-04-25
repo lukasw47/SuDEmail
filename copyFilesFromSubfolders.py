@@ -31,7 +31,7 @@ def scan_folder(source, target):
     source_glob = os.path.join(source, '**/*.csv')
     source_files = glob.glob(source_glob, recursive=True)
     for source_file in source_files:
-        print(f'>> copy ')
+        print(f'>> copy {source_file}')
         source_filename = os.path.basename(source_file)
         target_file = os.path.join(target, source_filename)
         shutil.copy(source_file, target_file)
