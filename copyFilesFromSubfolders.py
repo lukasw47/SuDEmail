@@ -9,25 +9,6 @@ import glob
 from typing import Optional
 
 
-def scanFolder(source, target):
-    """ Scans a sourcefolder for csv-files and copies them to target.
-        Returns number of files copied."""
-
-    numberOfFilesCopied = 0
-
-    for content in os.scandir(source):
-        if content.is_dir():
-            print(content.path)
-            numberOfFilesCopied += scanFolder(content.path, target)
-        elif content.is_file():
-            if content.path.endswith(".csv"):
-                print(content.path)
-                shutil.copy(content, target)
-                numberOfFilesCopied += 1
-
-    return numberOfFilesCopied
-
-
 def scan_folder(source: str, target: str) -> None:
     source_files = find_csv_files(source)
     if source_files is None:
