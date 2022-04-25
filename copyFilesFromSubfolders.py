@@ -53,8 +53,7 @@ def combine_csv_files(source_files: list[str]) -> str:
 
 def get_csv_file_header_and_content(source_file: str) -> tuple[str, list[str]]:
     with open(source_file, mode='r') as file:
-        header = file.readline()
-        content = file.readlines()
+        header, content = file.readline(), file.readlines()
         return header, content
 
 
