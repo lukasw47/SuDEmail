@@ -8,7 +8,7 @@ def scan_folder(source: str, target: str) -> None:
     source_files = find_csv_files(source)
     if source_files is None:
         return
-    copy_files_to_target(files=source_files, target=target)
+    copy_files_to_target(source_files=source_files, target=target)
     print(f'>> combine\n{combine_csv_files(files=source_files)}')
 
 
@@ -20,18 +20,22 @@ def find_csv_files(path_name: str) -> Optional[list[str]]:
     return glob.glob(source_glob, recursive=True)
 
 
-def copy_files_to_target(files: list[str], target: str) -> None:
+def copy_files_to_target(source_files: list[str], target: str) -> None:
     create_folder_if_not_exists(target)
-    for index, source_file in enumerate(files):
-        print(f'>> copy {source_file}')
-        source_filename = f'{index + 1}_' + os.path.basename(source_file)
-        target_file = os.path.join(target, source_filename)
-        shutil.copy(source_file, target_file)
-    print(f">> files copied: {len(files)}")
+    for index, source_file in enumerate(source_files):
+        copy_file_to_target(index, source_file, target)
+    print(f">> files copied: {len(source_files)}")
 
 
 def create_folder_if_not_exists(path_name: str) -> None:
     os.makedirs(path_name, exist_ok=True)
+
+
+def copy_file_to_target(index: int, source_file: str, target: str) -> None:
+    print(f'>> copy {source_file}')
+    source_filename = f'{index + 1}_' + os.path.basename(source_file)
+    target_file = os.path.join(target, source_filename)
+    shutil.copy(source_file, target_file)
 
 
 def combine_csv_files(files: list[str]) -> str:
