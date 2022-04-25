@@ -41,7 +41,7 @@ def create_folder_if_not_exists(path_name: str) -> None:
 
 
 def find_csv_files(path_name: str) -> Optional[list[str]]:
-    if os.path.isdir(path_name):
+    if not os.path.isdir(path_name):
         print(f'>> error: folder not found: {path_name}')
         return
     source_glob = os.path.join(path_name, '**/*time_record*.csv')
