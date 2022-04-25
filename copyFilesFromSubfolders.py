@@ -46,4 +46,4 @@ if __name__ == '__main__':
 
     # action
     resultNumber = scanFolder(sourceFolderName, targetFolderName)
-    print(f"Anzahl kopierter Dateien:{resultNumber}")
+    print(f"Anzahl kopierter Dateien: {resultNumber}")
