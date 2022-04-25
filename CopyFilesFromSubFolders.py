@@ -56,7 +56,7 @@ def save_combined_files(source_files: list[str], target) -> None:
 
 def save_excel_file(csv_file: pathlib.Path) -> None:
     excel_file = csv_file.with_suffix('.xlsx')
-    pandas.read_csv(csv_file).to_excel(excel_file)
+    pandas.read_csv(csv_file, delimiter=';').to_excel(excel_file)
     print(f'>> combine files in: {excel_file}')
 
 
