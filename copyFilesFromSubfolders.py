@@ -44,11 +44,9 @@ def create_folder_if_not_exists(name):
 
 
 if __name__ == '__main__':
-    # configuration
     path = "."
     sourceFolderName = os.path.join(path, "quellordner")
     targetFolderName = os.path.join(path, "zielordner")
 
-    # action
     resultNumber = scan_folder(sourceFolderName, targetFolderName)
     print(f"Anzahl kopierter Dateien: {resultNumber}")
