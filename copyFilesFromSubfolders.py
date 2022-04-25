@@ -34,13 +34,13 @@ def create_folder_if_not_exists(path_name: str) -> None:
 
 def copy_file_to_target(index: int, source_file: str, target: str) -> None:
     print(f'>> copy {source_file}')
-    target_filename = get_target_filename(index, source_file, target)
-    shutil.copy(source_file, target_filename)
+    target_file = get_target_file(index, source_file, target)
+    shutil.copy(source_file, target_file)
 
 
-def get_target_filename(index: int, source_file: str, target: str) -> pathlib.Path:
+def get_target_file(index: int, source_file: str, target: str) -> pathlib.Path:
     source_filename = os.path.basename(source_file)
-    return pathlib.Path(target, source_filename).with_suffix(f'_{index + 1}.csv')
+    return pathlib.Path(target, source_filename).with_suffix(f'.{index + 1}.csv')
 
 
 def combine_csv_files(files: list[str]) -> str:
