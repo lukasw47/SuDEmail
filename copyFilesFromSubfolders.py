@@ -51,9 +51,9 @@ def find_csv_files(path_name: str) -> Optional[list[str]]:
 
 def copy_files_to_target(files: list[str], target: str) -> None:
     create_folder_if_not_exists(target)
-    for source_file in files:
+    for index, source_file in enumerate(files):
         print(f'>> copy {source_file}')
-        source_filename = os.path.basename(source_file)
+        source_filename = f'{index + 1}_' + os.path.basename(source_file)
         target_file = os.path.join(target, source_filename)
         shutil.copy(source_file, target_file)
 
