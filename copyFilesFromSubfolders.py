@@ -9,8 +9,8 @@ def scan_folder(source: str, target: str) -> None:
     source_files = find_csv_files(source)
     if source_files is None:
         return
-    copy_files_to_target(source_files=source_files, target=target)
-    print(f'>> combine\n{combine_csv_files(files=source_files)}')
+    copy_files_to_target(source_files, target)
+    print(f'>> combine\n{combine_csv_files(source_files)}')
 
 
 def find_csv_files(path_name: str) -> Optional[list[str]]:
@@ -43,16 +43,16 @@ def get_target_file(index: int, source_file: str, target: str) -> pathlib.Path:
     return pathlib.Path(target, source_filename).with_suffix(f'.{index + 1}.csv')
 
 
-def combine_csv_files(files: list[str]) -> str:
+def combine_csv_files(source_files: list[str]) -> str:
     combine = ['']
-    for file in files:
-        combine[0], file_content = get_csv_file_header_and_content(filename=file)
+    for source_file in source_files:
+        combine[0], file_content = get_csv_file_header_and_content(source_file)
         combine.extend(file_content)
     return str.join('', combine)
 
 
-def get_csv_file_header_and_content(filename: str) -> tuple[str, list[str]]:
-    with open(filename, mode='r') as file:
+def get_csv_file_header_and_content(source_file: str) -> tuple[str, list[str]]:
+    with open(source_file, mode='r') as file:
         header = file.readline()
         content = file.readlines()
         return header, content
