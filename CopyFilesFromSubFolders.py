@@ -1,7 +1,7 @@
+import glob
 import os
 import pathlib
 import shutil
-import glob
 from collections import defaultdict
 from typing import Mapping
 
