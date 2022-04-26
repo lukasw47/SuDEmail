@@ -2,7 +2,6 @@ import glob
 import os
 import pathlib
 import shutil
-from collections import defaultdict
 from typing import Mapping
 
 import pandas
@@ -35,9 +34,9 @@ def load_csv_filepaths_in_path(path: pathlib.Path) -> list[str]:
 
 
 def get_source_paths_grouped_by_filenames(filepaths: list[str]) -> Mapping[str, list[pathlib.Path]]:
-    source_paths = defaultdict(list)
+    source_paths = {}
     for file in map(pathlib.Path, filepaths):
-        source_paths[file.name].append(file)
+        source_paths.setdefault(file.name, []).append(file)
     return source_paths
 
 
