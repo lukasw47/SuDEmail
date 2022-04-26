@@ -80,8 +80,8 @@ def get_combined_csv_files(filepaths: list[pathlib.Path]) -> str:
     return str.join('', combine)
 
 
-def get_csv_file_header_and_content(source_file: pathlib.Path) -> tuple[str, list[str]]:
-    with open(source_file, mode='r') as file:
+def get_csv_file_header_and_content(filepath: pathlib.Path) -> tuple[str, list[str]]:
+    with open(filepath, mode='r') as file:
         return file.readline(), file.readlines()
 
 
