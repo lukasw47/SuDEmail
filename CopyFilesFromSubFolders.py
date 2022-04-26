@@ -42,7 +42,7 @@ def get_source_paths_grouped_by_filenames(filepaths: list[str]) -> Mapping[str, 
 
 def process_csv_source_paths(csv_source_paths: Mapping[str, list[pathlib.Path]], target: pathlib.Path) -> None:
     for filename, filepaths in csv_source_paths.items():
-        target_filepath = target / filename
+        target_filepath = pathlib.Path(target, filename)
         copy_files_to_target(filepaths, target_filepath)
         save_combined_files(filepaths, target_filepath)
 
