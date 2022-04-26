@@ -60,8 +60,8 @@ def copy_file_to_target(source_file: pathlib.Path, target_filepath: pathlib.Path
     print(f'>> copy "{source_file}" to "{target_csv_file}"')
 
 
-def get_target_csv_file_with_index(target: pathlib.Path, index: int) -> pathlib.Path:
-    return target.with_suffix(f'.{index + 1}.csv')
+def get_target_csv_file_with_index(target_filepath: pathlib.Path, index: int) -> pathlib.Path:
+    return target_filepath.with_suffix(f'.{index + 1}.csv')
 
 
 def save_combined_files(filepaths: list[pathlib.Path], target_filepath: pathlib.Path) -> None:
