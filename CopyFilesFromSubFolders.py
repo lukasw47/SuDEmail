@@ -82,8 +82,7 @@ def get_combined_csv_files(filepaths: list[pathlib.Path]) -> str:
 
 def get_csv_file_header_and_content(source_file: pathlib.Path) -> tuple[str, list[str]]:
     with open(source_file, mode='r') as file:
-        header, content = file.readline(), file.readlines()
-        return header, content
+        return file.readline(), file.readlines()
 
 
 def save_excel_file(csv_file: pathlib.Path) -> None:
