@@ -7,6 +7,17 @@ from typing import Mapping
 import pandas
 
 
+def main():
+    source_folder = pathlib.Path("quellordner")
+    target_folder = pathlib.Path("zielordner")
+
+    try:
+        process_csv_files_from_source(source_folder, target_folder)
+
+    except FileNotFoundError as error:
+        print(f'>> error: {error}')
+
+
 def process_csv_files_from_source(source: pathlib.Path, target: pathlib.Path) -> None:
     check_if_path_is_folder(path=source)
     create_folder_if_not_exists(path=target)
@@ -91,11 +102,4 @@ def save_excel_file(csv_file: pathlib.Path) -> None:
 
 
 if __name__ == '__main__':
-    source_folder = pathlib.Path("quellordner")
-    target_folder = pathlib.Path("zielordner")
-
-    try:
-        process_csv_files_from_source(source_folder, target_folder)
-
-    except FileNotFoundError as error:
-        print(f'>> error: {error}')
+    main()
