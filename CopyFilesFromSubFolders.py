@@ -77,17 +77,19 @@ def get_target_csv_file_with_index(target_filepath: pathlib.Path, index: int) ->
 def save_combined_files(filepaths: list[pathlib.Path], target_filepath: pathlib.Path) -> None:
     if len(filepaths) == 0:
         return
-    target_csv_content = get_combined_csv_files(filepaths)
+    target_csv_content, lines_copied = get_combined_csv_files(filepaths)
+    print(f'>> total combined lines: {lines_copied}')
     target_filepath.write_text(target_csv_content)
     print(f'>> combine files in: {target_filepath}')
     save_excel_file(csv_file=target_filepath)
 
 
-def get_combined_csv_files(filepaths: list[pathlib.Path]) -> str:
+def get_combined_csv_files(filepaths: list[pathlib.Path]) -> tuple[str, int]:
     combine = ['']
     for combine[0], file_content in map(get_csv_file_header_and_content, filepaths):
         combine.extend(file_content)
-    return str.join('', combine)
+    lines_copied = len(combine) + len(filepaths) - 1
+    return str.join('', combine), lines_copied
 
 
 def get_csv_file_header_and_content(filepath: pathlib.Path) -> tuple[str, list[str]]:
