@@ -55,7 +55,7 @@ def process_csv_source_paths(csv_source_paths: Mapping[str, list[pathlib.Path]],
     for filename, filepaths in csv_source_paths.items():
         target_filepath = pathlib.Path(target, filename)
         copy_files_to_target(filepaths, target_filepath)
-        print(f">> files copied: {len(filepaths) +1}")
+        print(f">> files copied: {len(filepaths) + 1}")
         save_combined_files(filepaths, target_filepath)
 
 
