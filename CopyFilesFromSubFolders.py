@@ -39,12 +39,11 @@ def get_csv_source_paths_in_path_grouped_by_filenames(path: pathlib.Path) -> Map
     return get_source_paths_grouped_by_filenames(filepaths=csv_filepaths)
 
 
-def load_csv_filepaths_in_path(path: pathlib.Path) -> list[str]:
-    search = str(path / '**/*time_record*.csv')
-    return glob.glob(search, recursive=True)
+def load_csv_filepaths_in_path(path: pathlib.Path) -> tuple[pathlib.Path]:
+    return tuple(path.glob('**/*time_record*.csv'))
 
 
-def get_source_paths_grouped_by_filenames(filepaths: list[str]) -> Mapping[str, list[pathlib.Path]]:
+def get_source_paths_grouped_by_filenames(filepaths: tuple[pathlib.Path]) -> Mapping[str, list[pathlib.Path]]:
     source_paths = {}
     for file in map(pathlib.Path, filepaths):
         source_paths.setdefault(file.name, []).append(file)
